@@ -21,7 +21,7 @@ public class UserController {
       @PageableDefault(size = 10, page = 1, sort = {"username,asc"}) Pageable pageable) {
     System.out.println(
         ReflectionToStringBuilder.toString(userQueryCondition, ToStringStyle.MULTI_LINE_STYLE));
-
+    System.out.println(pageable.getSort());
     System.out.println(pageable.getSort());
     System.out.println(pageable.getOffset());
     System.out.println(pageable.getPageSize());
