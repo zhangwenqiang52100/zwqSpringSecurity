@@ -5,6 +5,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import jdk.jfr.ContentType;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -32,13 +33,33 @@ public class UserControllerTest {
 
   @Test
   public void whenQuerySuccess() throws Exception {
-    mockMvc
+    String result = mockMvc
         .perform(
             get("/user").param("username", "jojo").param("age", "14")
                 .param("ageTo", "17").param("xxx", "qwe")
-            //    .param("size", "13").param("sort", "age,desc").param("page", "3")
+                //    .param("size", "13").param("sort", "age,desc").param("page", "3")
                 .contentType(MediaType.APPLICATION_JSON_UTF8))
         .andExpect(status().isOk())
-        .andExpect(jsonPath("$.length()").value(3));
+        .andExpect(jsonPath("$.length()").value(3)).andReturn().getResponse().getContentAsString();
+
+    System.out.println(result);
+  }
+
+
+  @Test
+  public void whenGeTUserInfoSuccess() throws Exception {
+
+    String result = mockMvc.perform(get("/user/1").contentType(MediaType.APPLICATION_JSON_UTF8))
+        .andExpect(status().isOk()).andExpect(jsonPath("$.username").value("tom")).andReturn()
+        .getResponse().getContentAsString();
+
+    System.out.println(result);
+  }
+
+  @Test
+  public void whenGetUserInfoFail() throws Exception {
+
+    mockMvc.perform(get("/user/is").contentType(MediaType.APPLICATION_JSON_UTF8))
+        .andExpect(status().is4xxClientError());
   }
 }
