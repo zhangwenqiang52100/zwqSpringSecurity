@@ -1,6 +1,7 @@
 package dto;
 
 import com.fasterxml.jackson.annotation.JsonView;
+import java.util.Date;
 
 public class User {
 
@@ -15,8 +16,29 @@ public class User {
   }
 
   ;
-  String username;
-  String password;
+
+  private String id;
+  private String username;
+  private String password;
+  private Date birthday;
+
+  @JsonView(UserSimpleView.class)
+  public Date getBirthday() {
+    return birthday;
+  }
+
+  public void setBirthday(Date birthday) {
+    this.birthday = birthday;
+  }
+
+  @JsonView(UserSimpleView.class)
+  public String getId() {
+    return id;
+  }
+
+  public void setId(String id) {
+    this.id = id;
+  }
 
   @JsonView(UserSimpleView.class)
   public String getUsername() {

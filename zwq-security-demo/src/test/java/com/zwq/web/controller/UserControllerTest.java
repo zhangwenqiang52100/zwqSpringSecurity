@@ -2,9 +2,12 @@ package com.zwq.web.controller;
 
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.time.Instant;
+import java.util.Date;
 import jdk.jfr.ContentType;
 import org.junit.Before;
 import org.junit.Test;
@@ -61,5 +64,22 @@ public class UserControllerTest {
 
     mockMvc.perform(get("/user/is").contentType(MediaType.APPLICATION_JSON_UTF8))
         .andExpect(status().is4xxClientError());
+  }
+
+
+  @Test
+  public void whenCreateSuccess() throws Exception {
+    Instant timestap = Instant.now();
+    System.out.println(timestap);
+    String content = "{\n"
+        + "  \"username\": \"tom\",\n"
+        + "  \"password\": \"1234\",\n"
+        + " \"birthday\":" + new Date().getTime()
+        + "\n}";
+    String result = mockMvc
+        .perform(post("/user").contentType(MediaType.APPLICATION_JSON_UTF8).content(content))
+        .andExpect(status().isOk()).andExpect(jsonPath("$.id").value("1")).andReturn().getResponse()
+        .getContentAsString();
+    System.out.println(result);
   }
 }
