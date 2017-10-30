@@ -2,6 +2,7 @@ package com.zwq.web.controller;
 
 
 import com.fasterxml.jackson.annotation.JsonView;
+import com.zwq.exception.UserNotExistException;
 import dto.User;
 import dto.UserQueryCondition;
 import java.util.ArrayList;
@@ -78,8 +79,9 @@ public class UserController {
   @JsonView(User.UserDetailView.class)
   public User getInfo(@PathVariable(value = "id", required = false) String id) {
     User user = new User();
+
+    System.out.println("getinfo服务启动");
     user.setUsername("tom");
-    user.setPassword("1234");
     return user;
   }
 
