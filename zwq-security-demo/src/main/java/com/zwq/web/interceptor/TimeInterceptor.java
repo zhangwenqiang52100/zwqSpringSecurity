@@ -17,8 +17,8 @@ public class TimeInterceptor implements HandlerInterceptor {
     System.out.println(((HandlerMethod) handler).getBean().getClass().getName());
     System.out.println(((HandlerMethod) handler).getMethod().getName());
     System.out.println("preHandle");
-    request.setAttribute("startTime 耗时", new Date().getTime());
-    return false;
+    request.setAttribute("startTime", new Date().getTime());
+    return true;
   }
 
   @Override
@@ -26,7 +26,7 @@ public class TimeInterceptor implements HandlerInterceptor {
       ModelAndView modelAndView) throws Exception {
     System.out.println("postHandle");
     long startTime = (long) request.getAttribute("startTime");
-    request.setAttribute("start interceptor 耗时", new Date().getTime() - startTime);
+    System.out.println("start interceptor 耗时"+(new Date().getTime() - startTime));
 
   }
 
@@ -35,7 +35,7 @@ public class TimeInterceptor implements HandlerInterceptor {
       Object handler, Exception ex) throws Exception {
     System.out.println("afterCompletion");
     long startTime = (long) request.getAttribute("startTime");
-    request.setAttribute("time afterCompletion 耗时", new Date().getTime() - startTime);
+    System.out.println("time afterCompletion 耗时"+(new Date().getTime() - startTime));
     System.out.println("ex:" + ex);
 
   }
