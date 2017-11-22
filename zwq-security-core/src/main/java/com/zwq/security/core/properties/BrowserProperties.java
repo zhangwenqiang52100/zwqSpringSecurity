@@ -7,9 +7,7 @@ public class BrowserProperties {
 
   private String loginPage = "/zwq-signIn.html";
   private LoginType loginType = LoginType.JSON;
-  private  int rememberMeSeconds=3600;
-
-
+  private int rememberMeSeconds = 3600;
 
   public String getLoginPage() {
     return loginPage;
