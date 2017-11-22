@@ -14,7 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.social.connect.web.HttpSessionSessionStrategy;
 import org.springframework.social.connect.web.SessionStrategy;
-import org.springframework.util.AntPathMatcher;
 import org.springframework.web.bind.ServletRequestBindingException;
 import org.springframework.web.bind.ServletRequestUtils;
 import org.springframework.web.context.request.ServletWebRequest;
@@ -29,31 +28,12 @@ public class ValidateCodeFilter extends OncePerRequestFilter implements Initiali
   private SessionStrategy sessionStrategy = new HttpSessionSessionStrategy();
   private Set<String> urls = new HashSet<>();
   private SecurityProperties securityProperties;
-  private AntPathMatcher antPathMatcher = new AntPathMatcher();
-
-  @Override
-  public void afterPropertiesSet() throws ServletException {
-    super.afterPropertiesSet();
-    String[] configUrls = StringUtils
-        .splitByWholeSeparatorPreserveAllTokens(securityProperties.getCode().getImage().getUrl(),
-            ",");
- /*   for (String configUrl : configUrls) {
-      urls.add(configUrl);
-    }
-*/
-    urls.add("/authentication/form");
-  }
 
   @Override
   protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
       FilterChain filterChain) throws ServletException, IOException {
-    boolean action = false;
-    for (String url : urls) {
-      if (antPathMatcher.match(url, request.getRequestURI())) {
-        action = true;
-      }
-    }
-    if (action) {
+    if (StringUtils.equals("/authentication/form", request.getRequestURI()) &&
+        StringUtils.equals("post", request.getMethod())) {
       try {
         validate(new ServletWebRequest(request));
       } catch (ValidateCodeException exception) {
